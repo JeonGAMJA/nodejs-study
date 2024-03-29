@@ -8,6 +8,9 @@ const postsRouter = require('./routes/posts.router');
 
 const app = express();
 
+app.set('view engine', 'hbs');
+app.set('view', path.join(__dirname, 'views'));
+
 app.use('/static', express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
@@ -20,7 +23,9 @@ app.use((req, res, next) => {
 });
 
 app.get('/', (req, res) => {
-  res.send('Hello world');
+  res.render('index', {
+    imageTitle: 'Is is a pokedex',
+  });
 });
 
 app.use('/users', usersRouter);
