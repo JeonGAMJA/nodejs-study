@@ -1,11 +1,9 @@
 const express = require('express');
 
-const PORT = 8000;
+const usersController = require('./controllers/users.controller');
+const postController = require('./controllers/posts.controller');
 
-const Users = [
-  { id: 0, name: 'Jack' },
-  { id: 1, name: 'Jsnnifer' },
-];
+const PORT = 8000;
 
 const app = express();
 
@@ -23,35 +21,11 @@ app.get('/', (req, res) => {
   res.send('Hello world');
 });
 
-app.get('/users', (req, res) => {
-  res.send(Users);
-});
+app.get('/users', usersController.getUsers);
+app.get('/users/:userID', usersController.getUser);
+app.post('/users', usersController.postUser);
 
-app.post('/users', (req, res) => {
-  if (!req.body.name) {
-    return res.status(400).json({
-      error: 'Missing user name',
-    });
-  }
-
-  console.log('req.body.name:' + req.body.name);
-  const newUser = {
-    name: req.body.name,
-    id: Users.length,
-  };
-  Users.push(newUser);
-  res.json(newUser);
-});
-
-app.get('/users/:userID', (req, res) => {
-  const userId = Number(req.params.userId);
-  const user = Users[userId];
-  if (user) {
-    res.json(user);
-  } else {
-    res.sendStatus(404);
-  }
-});
+app.get('/posts', postController.getPost);
 
 app.listen(PORT);
 console.log(`Running on http://localhost:${PORT}`);
